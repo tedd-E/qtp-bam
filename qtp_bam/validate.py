@@ -58,27 +58,42 @@ def validate(qclient, job_id, parameters, out_dir):
     if a_type.upper() != "BAM":
         return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
 
-    # check for valid bam/bai pair
-    if files
+    # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
+    for bamfile in files['bam']:
+        if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
+            try:
+                pysam.index(bamfile)
+            except Exception:
+                return False, None, "Unable to generate bai file for bam file %s" % bamfile
 
 
     qclient.update_job_step(job_id, "Step 2: Validating files")
-    # TODO: Validate if the files provided by Qiita generate a valid artifact of type "a_type"
+    # Validate if the files provided by Qiita generate a valid artifact of type "a_type"
 
-    # NOTE: if filepath doesn't actually point to a file thats gonna be problems
-    for _, filepath in files:
-        samfile = pysam.Samfile(filepath)
+    # NOTE: if filepath doesn't actually point to a file but a generic path thats gonna be problems
+    # for _, filepath in files:
+    #     samfile = pysam.AlignmentFile("ex1.bam", "rb")
+    #     for aread in samfile:
+    #         title = aread.qname
+    #         seq = aread.seq
+    #         qual = aread.qual
+    #         line_fmt = "@{0!s}\n{1!s}\n+{0!s}\n{2!s}\n"
+    #         line = line_fmt.format(title, seq, qual)
 
+    # samtools quickcheck -v *.bam > bad_bams.fofn
+    for bamfile in files['bam']:
+        try:
+            pysam.quickcheck(bamfile)
+        except Exception:
+            return False, None, "Error: %s failed sanity check. Verify file is formatted properly" % bamfile
 
-
-
-
-
-
-    # skip this part for now v
+    # NOTE: im skipping this part for now (low priority)
     # qclient.update_job_step(job_id, "Step 3: Fixing files")
     # TODO: If the files are not creating a valid artifact but they can be corrected, correct them here
 
-    # TODO: fill filepaths with a list of tuples with (filepath, filepath type)
+    # fill filepaths with a list of tuples with (filepath, filepath type)
     filepaths = []
+    filepaths.append((files['bam'][0], 'biom'))
+
+    # TODO: need to generate summary here??
     return True, [ArtifactInfo(None, a_type, filepaths)], ""
