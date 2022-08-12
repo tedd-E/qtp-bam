@@ -93,7 +93,7 @@ def validate(qclient, job_id, parameters, out_dir):
 
     # fill filepaths with a list of tuples with (filepath, filepath type)
     filepaths = []
-    filepaths.append((files['bam'][0], 'biom'))
+    filepaths.append((files['bam'][0], 'bam'))
 
     # TODO: need to generate summary here??
     return True, [ArtifactInfo(None, a_type, filepaths)], ""
