@@ -11,7 +11,7 @@ from qiita_client import QiitaTypePlugin, QiitaArtifactType
 from .validate import validate
 from .summary import generate_html_summary
 
-# TODO:  Define the supported artifact types
+# Define the supported artifact types
 # Here is an example on how to create a type
 # artifact_types = [
 #     QiitaArtifactType('BIOM', 'BIOM table', False, False,
@@ -27,9 +27,9 @@ from .summary import generate_html_summary
 
 # Initialize the plugin
 
-# todo: may have to revisit LIST_OF_ACCEPTED_FILEPATH_TYPE
+# NOTE: may have to revisit LIST_OF_ACCEPTED_FILEPATH_TYPE
 artifact_types = [
-    QiitaArtifactType('BAM', 'BAM file', False, False, [('bam', True)])
+    QiitaArtifactType('BAM', 'BAM file', False, False, [('bam', True), ('bai', False)])
 ]
 
 plugin = QiitaTypePlugin('bam type', '0.0.1',
