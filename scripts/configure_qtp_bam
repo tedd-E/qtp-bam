@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+# -----------------------------------------------------------------------------
+# Copyright (c) 2022, Qiita development team.
+#
+# Distributed under the terms of the Apache Software License 2.0 License.
+#
+# The full license is in the file LICENSE, distributed with this software.
+# -----------------------------------------------------------------------------
+
+import click
+
+from qtp_bam import plugin
+
+
+@click.command()
+@click.option('--env-script', prompt='Environment script',
+              default='source activate qtp-bam')
+@click.option('--server-cert', prompt='Server certificate', default='None')
+def config(env_script, server_cert):
+    """Generates the Qiita configuration files"""
+    if server_cert == 'None':
+        server_cert = None
+    plugin.generate_config(env_script, 'start_qtp_bam', server_cert=server_cert)
+
+if __name__ == '__main__':
+    config()
