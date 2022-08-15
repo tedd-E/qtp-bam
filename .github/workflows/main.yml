@@ -1,9 +1,9 @@
 # name: Qiita Plugin CI
 
 on: [push]
-  push:
-    branches: [ dev ]
-  pull_request:
+#  push:
+#    branches: [ dev ]
+#  pull_request:
 
 jobs:
   # derived from https://github.com/actions/example-services/blob/master/.github/workflows/postgres-service.yml
