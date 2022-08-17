@@ -13,7 +13,7 @@ import pysamstats
 import matplotlib.pyplot as plt
 from os.path import join
 
-
+# TODO: look at step 7/8 of notes for BAM summary generation!
 def generate_html_summary(qclient, job_id, parameters, out_dir):
     """Generates the HTML summary of an artifact
 
