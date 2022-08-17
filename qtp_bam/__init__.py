@@ -32,7 +32,7 @@ artifact_types = [
     QiitaArtifactType('BAM', 'BAM file', False, False, [('bam', True), ('bai', False)])
 ]
 
-plugin = QiitaTypePlugin('bam type', '0.0.1',
-                         'Qiita Type Plugin: bam',
+plugin = QiitaTypePlugin('BAM type', '0.0.1 - bam',
+                         'Qiita Type Plugin: BAM',
                          validate, generate_html_summary,
                          artifact_types)
