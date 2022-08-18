@@ -30,7 +30,7 @@ with open('README.rst') as f:
 
 classifiers = [s.strip() for s in classes.split('\n') if s]
 
-setup(name='bam Qiita Type Plugin',
+setup(name='BAM Qiita Type Plugin',
       version=__version__,
       long_description=long_description,
       license="BSD",
