@@ -98,7 +98,7 @@ def validate(qclient, job_id, parameters, out_dir):
             except Exception:
                 return False, None, "Unable to generate bai file for bam file %s" % bamfile
 
-
+    # TODO: may need to do validation between trimmed/untrimmed/sorted/unsorted BAM
     qclient.update_job_step(job_id, "Step 2: Validating files")
     # Validate if the files provided by Qiita generate a valid artifact of type "a_type"
     # ACTUAL COMMAND: samtools quickcheck *.bam && echo 'all ok' || echo 'fail'
@@ -121,9 +121,9 @@ def validate(qclient, job_id, parameters, out_dir):
     # TODO: If the files are not creating a valid artifact but they can be corrected, correct them here
 
     # fill filepaths with a list of tuples with (filepath, filepath type)
+    # note: for now only has 1 tuple since just bam
     filepaths = []
     new_bam_fp = join(out_dir, basename(files['bam'][0]))
-
     filepaths.append((new_bam_fp, 'bam'))
 
     return True, [ArtifactInfo(None, a_type, filepaths)], ""
