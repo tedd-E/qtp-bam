@@ -59,9 +59,9 @@ class SummaryTestsWith(PluginTestCase):
     def test_generate_html_summary(self):
         # TODO: fill the following variables to create the job in the Qiita
         # test server
-        artifact = "TODO"
+        artifact_id = 1
         command = "TODO"
-        job_id, parameters = self._create_job(artifact, command)
+        job_id, parameters = self._create_job(artifact_id, command)
 
         obs_success, obs_ainfo, obs_error = generate_html_summary(
             self.qclient, job_id, parameters, self.out_dir)
@@ -72,7 +72,7 @@ class SummaryTestsWith(PluginTestCase):
         self.assertEqual(obs_error, "")
 
         # asserting content of html
-        res = self.qclient.get("/qiita_db/artifacts/%s/" % artifact)
+        res = self.qclient.get("/qiita_db/artifacts/%s/" % artifact_id)
         html_fp = res['files']['html_summary'][0]
         self._clean_up_files.append(html_fp)
 
