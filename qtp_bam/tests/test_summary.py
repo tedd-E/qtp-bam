@@ -38,7 +38,7 @@ class SummaryTestsWith(PluginTestCase):
         ----------
         artifact: int
             The artifact id to be validated during tests
-        command: int
+        command: str (NOTE: changed from int)
             Qiita's command id for the 'Generate HTML summary' operation
 
         Returns
@@ -57,10 +57,9 @@ class SummaryTestsWith(PluginTestCase):
         return job_id, parameters
 
     def test_generate_html_summary(self):
-        # TODO: fill the following variables to create the job in the Qiita
         # test server
-        artifact_id = 1
-        command = "TODO"
+        artifact_id = 420
+        command = dumps(['BAM type', '0.0.1', 'Generate HTML summary'])
         job_id, parameters = self._create_job(artifact_id, command)
 
         obs_success, obs_ainfo, obs_error = generate_html_summary(
@@ -83,7 +82,20 @@ class SummaryTestsWith(PluginTestCase):
     # TODO: Write any other tests needed to get your coverage as close as
     # possible to 100%!!
 
-EXP_HTML = """TODO: write your expected HTML result here"""
+# NOTE: might have to change this to html format (see qtp-sequencing)
+EXP_HTML = "416648 + 0 in total (QC-passed reads + QC-failed reads)\n \
+0 + 0 secondary\n\
+250 + 0 supplementary\n\
+0 + 0 duplicates\n\
+416648 + 0 mapped (100.00% : N/A)\n\
+416398 + 0 paired in sequencing\n\
+209686 + 0 read1\n\
+206712 + 0 read2\n\
+384858 + 0 properly paired (92.43% : N/A)\n\
+415559 + 0 with itself and mate mapped\n\
+839 + 0 singletons (0.20% : N/A)\n\
+0 + 0 with mate mapped to a different chr\n\
+0 + 0 with mate mapped to a different chr (mapQ>=5)"
 
 if __name__ == '__main__':
     main()

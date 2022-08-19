@@ -20,6 +20,7 @@ from qtp_bam.validate import validate
 
 
 class CreateTests(PluginTestCase):
+    # TODO: create
     def setUp(self):
         self.out_dir = mkdtemp()
         self._clean_up_files = [self.out_dir]
@@ -66,10 +67,12 @@ class CreateTests(PluginTestCase):
     def test_validate(self):
         # TODO: fill the following variables to create the job in the Qiita
         # test server
-        artifact_type = "TODO"
+        artifact_type = "BAM"
+        # TODO: look at qtp sequencing test validate line 79 :)
         files = {"TODO": ["TODO"]}
         command = "TODO"
-        template = "TODO"
+        template = 1
+
         job_id, parameters = self._create_job(
             artifact_type, files, command, template)
         obs_success, obs_ainfo, obs_error = validate(
