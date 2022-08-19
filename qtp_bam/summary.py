@@ -76,15 +76,16 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
 
     # Step 2: generate HTML summary
     qclient.update_job_step(job_id, "Step 2: Generating HTML summary")
+    # commands in pysam equivalent to:
     # samtools stats <file.bam> | grep "is sorted:"
     # samtools flagstat test.bam (gets summary)
 
-    # TODO: check that artifact_files iteration is correct
     # NOTE: for now, assumes bam
     artifact_information = "--BAM SUMMARY,--"
-    for bamfile in artifact_files:
+    for bamfile in artifact_files['files']['bam']:
         artifact_information += '\n' + str(pysam.flagstat(bamfile))
 
+    # Work on this part if we have time to make visualization for the summary
     # code from https://pypi.org/project/pysamstats/0.14/
     # mybam = pysam.Samfile(artifact_files[0])
     # a = pysamstats.load_coverage(mybam, chrom='Pf3D7_01_v3', start=10000, end=20000)
