@@ -13,36 +13,7 @@ import pysamstats
 import matplotlib.pyplot as plt
 from os.path import join
 
-"""
-def summary(qclient, job_id, parameters, out_dir)
 
-qclient = qiita client instance (use for getting "res" (see biom test_validate line 52?)
-job id = string (not important)
-parameters = {'template': 1,
-              'files': dumps(filepaths),
-              'artifact_type': 'BIOM',
-              'analysis': 1}
-out_dir = mkdtemp()   (outputs files to a temp dir) 
-
-NOTE that dumps(filepaths) is the JSON string format of filepaths, where...
-filepaths = {'biom': [join(fp_support_files, 'sepp.biom')],
-                     'preprocessed_fasta': [join(fp_support_files, 'sepp.fa')],
-                     'plain_text': [join(fp_support_files, 'sepp.tre')]}
-aka 
-    filepaths = {
-                'biom': [fp_support_files/sepp.biom],
-                 'preprocessed_fasta': [fp_support_files/sepp.fa')],
-                 'plan_text': [join(fp_support_files/sepp.tre')]
-                 }
-such that...
-parameters = {'template': 1,
-              'files': {'biom': [join(fp_support_files, 'sepp.biom')],
-                     'preprocessed_fasta': [join(fp_support_files, 'sepp.fa')],
-                     'plain_text': [join(fp_support_files, 'sepp.tre')]},
-              'artifact_type': 'BIOM',
-              'analysis': 1}
-"""
-# TODO: look at step 7/8 of notes for BAM summary generation!
 def generate_html_summary(qclient, job_id, parameters, out_dir):
     """Generates the HTML summary of an artifact
 

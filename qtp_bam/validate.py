@@ -12,35 +12,6 @@ from os.path import join, basename
 import pysam
 from qiita_client import ArtifactInfo
 
-"""
-def validate(qclient, job_id, parameters, out_dir)
-
-qclient = qiita client instance (use for getting "res" (see biom test_validate line 52?)
-job id = string (not important)
-parameters = {'template': 1,
-              'files': dumps(filepaths),
-              'artifact_type': 'BIOM',
-              'analysis': 1}
-out_dir = mkdtemp()   (outputs files to a temp dir) 
-
-NOTE that dumps(filepaths) is the JSON string format of filepaths, where...
-filepaths = {'biom': [join(fp_support_files, 'sepp.biom')],
-                     'preprocessed_fasta': [join(fp_support_files, 'sepp.fa')],
-                     'plain_text': [join(fp_support_files, 'sepp.tre')]}
-aka 
-    filepaths = {
-                'biom': [fp_support_files/sepp.biom],
-                 'preprocessed_fasta': [fp_support_files/sepp.fa')],
-                 'plan_text': [join(fp_support_files/sepp.tre')]
-                 }
-such that...
-parameters = {'template': 1,
-              'files': {'biom': [join(fp_support_files, 'sepp.biom')],
-                     'preprocessed_fasta': [join(fp_support_files, 'sepp.fa')],
-                     'plain_text': [join(fp_support_files, 'sepp.tre')]},
-              'artifact_type': 'BIOM',
-              'analysis': 1}
-"""
 # can ignore qclient, seems to just log the current step
 def validate(qclient, job_id, parameters, out_dir):
     """Validate and fix a new artifact
@@ -84,9 +55,6 @@ def validate(qclient, job_id, parameters, out_dir):
     files = loads(parameters['files'])  # dictionary {str:filepath-type: list:filepaths}
     a_type = parameters['artifact_type']    # str:artifact-type
 
-    # don't know if need yet:
-    prep_info = qclient.get("/qiita_db/prep_template/%s/data/" % prep_id)['data']   # metadata in bam
-
     if a_type.upper() != "BAM":
         return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
 
@@ -109,19 +77,11 @@ def validate(qclient, job_id, parameters, out_dir):
         except Exception:
             return False, None, "Error: %s failed sanity check. Verify file is formatted properly" % bamfile
 
-    # alternative version of above for loop?
-    # try:
-    #     pysam.quickcheck(join(basename(files['bam'][0]), "*.bam"))
-    # except Exception:
-    #     return False, None, "Error: a file failed sanity check. Verify file is formatted properly"
-    #
-
-    # NOTE: im skipping this part for now (low priority)
+    # NOTE: skipping this part for now
     # qclient.update_job_step(job_id, "Step 3: Fixing files")
     # TODO: If the files are not creating a valid artifact but they can be corrected, correct them here
 
     # fill filepaths with a list of tuples with (filepath, filepath type)
-    # note: for now only has 1 tuple since just bam
     filepaths = []
     new_bam_fp = join(out_dir, basename(files['bam'][0]))
     filepaths.append((new_bam_fp, 'bam'))

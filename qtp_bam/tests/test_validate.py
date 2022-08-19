@@ -76,7 +76,7 @@ class CreateTests(PluginTestCase):
         # TODO: fill the following variables to create the job in the Qiita
         # test server
         artifact_type = "BAM"
-        # TODO: look at qtp sequencing test validate line 79 :)
+
         files = {'bam': [f'{self.source_dir}/file.bam']}
         command = dumps(['BAM type', '0.0.1 - bam', 'Validate'])
         template = 1
@@ -89,9 +89,10 @@ class CreateTests(PluginTestCase):
         self.assertTrue(obs_success)
         # TODO: Fill filepaths with the expected filepath list and provide
         # the expected artifact type
+        # NOTE: come back to fix
+        filepaths = [(f'{self.source_dir}', 'bam')]
 
-        filepaths = [("TODO", 'bam')]
-        exp_ainfo = [ArtifactInfo(None, 'TODO: artifact type', filepaths)]
+        exp_ainfo = [ArtifactInfo(None, 'BAM', filepaths)]
         self.assertEqual(obs_ainfo, exp_ainfo)
         self.assertEqual(obs_error, "")
 
