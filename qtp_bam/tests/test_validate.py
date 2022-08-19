@@ -10,7 +10,11 @@ from unittest import main
 from tempfile import mkdtemp
 from os import remove, environ
 from os.path import exists, isdir
-from shutil import rmtree
+from tempfile import mkdtemp, mkstemp
+from os import remove, close
+from os.path import exists, isdir, basename, splitext, join, dirname, abspath
+from inspect import currentframe, getfile
+from shutil import copyfile, rmtree
 from json import dumps
 
 from qiita_client import QiitaClient, ArtifactInfo
@@ -24,6 +28,10 @@ class CreateTests(PluginTestCase):
     def setUp(self):
         self.out_dir = mkdtemp()
         self._clean_up_files = [self.out_dir]
+        self.source_dir = join(dirname(abspath(getfile(currentframe()))), 'test_data')
+        # test file is trimmed and sorted BAM
+        self.bamfile = join(self.source_dir, 'file.bam')
+
 
     def tearDown(self):
         for fp in self._clean_up_files:
@@ -42,7 +50,7 @@ class CreateTests(PluginTestCase):
             The artifact type
         files: dict of {str: list of str}
             The files to be validated, keyed by filepath type
-        command: int
+        command: str (note: changed from int)
             Qiita's command id for the 'validate' operation
         template: int, optional
             The template id to which the artifact will be added
@@ -69,8 +77,8 @@ class CreateTests(PluginTestCase):
         # test server
         artifact_type = "BAM"
         # TODO: look at qtp sequencing test validate line 79 :)
-        files = {"TODO": ["TODO"]}
-        command = "TODO"
+        files = {'bam': [f'{self.source_dir}/file.bam']}
+        command = dumps(['BAM type', '0.0.1 - bam', 'Validate'])
         template = 1
 
         job_id, parameters = self._create_job(
@@ -81,7 +89,8 @@ class CreateTests(PluginTestCase):
         self.assertTrue(obs_success)
         # TODO: Fill filepaths with the expected filepath list and provide
         # the expected artifact type
-        filepaths = [("TODO", "TODO")]
+
+        filepaths = [("TODO", 'bam')]
         exp_ainfo = [ArtifactInfo(None, 'TODO: artifact type', filepaths)]
         self.assertEqual(obs_ainfo, exp_ainfo)
         self.assertEqual(obs_error, "")

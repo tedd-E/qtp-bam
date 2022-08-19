@@ -59,7 +59,7 @@ class SummaryTestsWith(PluginTestCase):
     def test_generate_html_summary(self):
         # test server
         artifact_id = 420
-        command = dumps(['BAM type', '0.0.1', 'Generate HTML summary'])
+        command = dumps(['BAM type', '0.0.1 - bam', 'Generate HTML summary'])
         job_id, parameters = self._create_job(artifact_id, command)
 
         obs_success, obs_ainfo, obs_error = generate_html_summary(
