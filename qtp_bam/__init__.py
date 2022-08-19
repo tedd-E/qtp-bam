@@ -29,7 +29,7 @@ from .summary import generate_html_summary
 
 # NOTE: may have to revisit LIST_OF_ACCEPTED_FILEPATH_TYPE
 artifact_types = [
-    QiitaArtifactType('BAM', 'BAM file', False, False, [('bam', True)])
+    QiitaArtifactType('BAM', 'BAM file', False, False, [('bam', True), ('directory', False)])
 ]
 
 plugin = QiitaTypePlugin('BAM type', '0.0.1 - bam',
