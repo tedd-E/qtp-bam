@@ -44,7 +44,8 @@ setup(name='BAM Qiita Type Plugin',
       scripts=glob('scripts/*'),
       extras_require={'test': ["nose >= 0.10.1", "pep8"]},
       install_requires=[
-          'click >= 3.3', 'qiita-files @ https://github.com/qiita-spots/'
+          'click >= 3.3', 'pysam',
+          'qiita-files @ https://github.com/qiita-spots/'
           'qiita-files/archive/master.zip',
           'qiita_client @ https://github.com/qiita-spots/'
           'qiita_client/archive/master.zip'],

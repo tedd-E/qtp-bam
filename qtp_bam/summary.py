@@ -9,8 +9,8 @@ from base64 import b64encode
 from io import BytesIO
 
 import pysam
-import pysamstats
-import matplotlib.pyplot as plt
+# import pysamstats
+# import matplotlib.pyplot as plt
 from os.path import join
 
 
