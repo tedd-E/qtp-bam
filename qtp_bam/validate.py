@@ -55,27 +55,38 @@ def validate(qclient, job_id, parameters, out_dir):
     files = loads(parameters['files'])  # dictionary {str:filepath-type: list:filepaths}
     a_type = parameters['artifact_type']    # str:artifact-type
 
-    if a_type.upper() != "BAM":
-        return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
+    # if a_type.upper() != "BAM":
+    #     return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
+
+    # # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
+    # for bamfile in files['bam']:
+    #     if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
+    #         try:
+    #             pysam.index(bamfile)
+    #         except Exception:
+    #             return False, None, "Unable to generate bai file for bam file %s" % bamfile
+    if a_type.upper() != "TGZ":
+        return False, None, "Unknown artifact type %s. Supported types: TGZ" % a_type
 
     # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
-    for bamfile in files['bam']:
-        if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
-            try:
-                pysam.index(bamfile)
-            except Exception:
-                return False, None, "Unable to generate bai file for bam file %s" % bamfile
+    for bamfile in files['tgz']:
+        print(bamfile)
+        # if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
+        #     try:
+        #         pysam.index(bamfile)
+        #     except Exception:
+        #         return False, None, "Unable to generate bai file for bam file %s" % bamfile
 
     # TODO: may need to do validation between trimmed/untrimmed/sorted/unsorted BAM
     qclient.update_job_step(job_id, "Step 2: Validating files")
     # Validate if the files provided by Qiita generate a valid artifact of type "a_type"
     # ACTUAL COMMAND: samtools quickcheck *.bam && echo 'all ok' || echo 'fail'
     # TODO: check exception catches
-    for bamfile in files['bam']:
-        try:
-            pysam.quickcheck(bamfile)
-        except Exception:
-            return False, None, "Error: %s failed sanity check. Verify file is formatted properly" % bamfile
+    # for bamfile in files['bam']:
+    #     try:
+    #         pysam.quickcheck(bamfile)
+    #     except Exception:
+    #         return False, None, "Error: %s failed sanity check. Verify file is formatted properly" % bamfile
 
     # NOTE: skipping this part for now
     # qclient.update_job_step(job_id, "Step 3: Fixing files")
@@ -83,7 +94,7 @@ def validate(qclient, job_id, parameters, out_dir):
 
     # fill filepaths with a list of tuples with (filepath, filepath type)
     filepaths = []
-    new_bam_fp = join(out_dir, basename(files['bam'][0]))
-    filepaths.append((new_bam_fp, 'bam'))
+    new_bam_fp = join(out_dir, basename(files['tgz'][0]))
+    filepaths.append((new_bam_fp, 'tgz'))
 
     return True, [ArtifactInfo(None, a_type, filepaths)], ""
