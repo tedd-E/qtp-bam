@@ -63,11 +63,11 @@ class CreateTests(PluginTestCase):
         # Create a new job
         parameters = {'template': template,
                       'files': dumps(files),
-                      'artifact_type': artifact_type}
+                      'artifact_type': artifact_type,
+                      'analysis': None}
         data = {'command': command,
                 'parameters': dumps(parameters),
-                'status': 'running',
-                'analysis': None}
+                'status': 'running'}
         res = self.qclient.post('/apitest/processing_job/', data=data)
         job_id = res['job']
 

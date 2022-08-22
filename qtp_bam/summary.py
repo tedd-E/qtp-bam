@@ -53,8 +53,9 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
 
     # NOTE: for now, assumes bam
     artifact_information = "--BAM SUMMARY,--"
-    for bamfile in artifact_files['files']['bam']:
-        artifact_information += '\n' + str(pysam.flagstat(bamfile))
+    print(artifact_files)
+    # for bamfile in artifact_files['files']['tgz']:
+    #     artifact_information += '\n' + str(pysam.flagstat(bamfile))
 
     # Work on this part if we have time to make visualization for the summary
     # code from https://pypi.org/project/pysamstats/0.14/
