@@ -55,6 +55,9 @@ def validate(qclient, job_id, parameters, out_dir):
     files = loads(parameters['files'])  # dictionary {str:filepath-type: list:filepaths}
     a_type = parameters['artifact_type']    # str:artifact-type
 
+    print(files)
+    print(a_type)
+
     # if a_type.upper() != "BAM":
     #     return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
 
@@ -69,8 +72,8 @@ def validate(qclient, job_id, parameters, out_dir):
         return False, None, "Unknown artifact type %s. Supported types: TGZ" % a_type
 
     # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
-    for bamfile in files['tgz']:
-        print(bamfile)
+    # for bamfile in files['tgz']:
+    #     print(bamfile)
         # if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
         #     try:
         #         pysam.index(bamfile)
