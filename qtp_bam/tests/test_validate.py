@@ -95,7 +95,7 @@ class CreateTests(PluginTestCase):
         # NOTE: come back to fix
         filepaths = [(f'{test_dir}/file.tar.gz', 'tgz')]
 
-        exp_ainfo = [ArtifactInfo(None, 'BAM', filepaths)]
+        exp_ainfo = [ArtifactInfo(None, 'tgz', filepaths)]
         self.assertEqual(obs_ainfo, exp_ainfo)
         self.assertEqual(obs_error, "")
 
