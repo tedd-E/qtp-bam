@@ -9,8 +9,8 @@ from base64 import b64encode
 from io import BytesIO
 
 import pysam
-import pysamstats
-import matplotlib.pyplot as plt
+# import pysamstats
+# import matplotlib.pyplot as plt
 from os.path import join
 
 
@@ -53,8 +53,9 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
 
     # NOTE: for now, assumes bam
     artifact_information = "--BAM SUMMARY,--"
-    for bamfile in artifact_files['files']['bam']:
-        artifact_information += '\n' + str(pysam.flagstat(bamfile))
+    print(artifact_files)
+    # for bamfile in artifact_files['tgz']:
+    #     artifact_information += '\n' + str(pysam.flagstat(bamfile))
 
     # Work on this part if we have time to make visualization for the summary
     # code from https://pypi.org/project/pysamstats/0.14/

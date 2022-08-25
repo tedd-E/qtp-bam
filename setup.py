@@ -37,12 +37,17 @@ setup(name='BAM Qiita Type Plugin',
       description='Qiita Type Plugin: bam',
       author="Qiita development team",
       author_email="qiita.help@gmail.com",
-      url='https://github.com/qiita-spots/qtp-bam',
+      url='https://github.com/tedd-E/qtp-bam',
       test_suite='nose.collector',
       packages=['qtp_bam'],
       package_data={'qtp_bam': ['support_files/config_file.cfg']},
       scripts=glob('scripts/*'),
       extras_require={'test': ["nose >= 0.10.1", "pep8"]},
-      install_requires=['click >= 3.3', 'qiita_client'],
+      install_requires=[
+          'click >= 3.3', 'pysam',
+          'qiita-files @ https://github.com/qiita-spots/'
+          'qiita-files/archive/master.zip',
+          'qiita_client @ https://github.com/qiita-spots/'
+          'qiita_client/archive/master.zip'],
       classifiers=classifiers
       )

@@ -58,7 +58,7 @@ class SummaryTestsWith(PluginTestCase):
 
     def test_generate_html_summary(self):
         # test server
-        artifact_id = 420
+        artifact_id = 4
         command = dumps(['BAM type', '0.0.1 - bam', 'Generate HTML summary'])
         job_id, parameters = self._create_job(artifact_id, command)
 
