@@ -10,8 +10,8 @@ from base64 import b64encode
 from io import BytesIO
 import gzip
 import pysam
-# import pysamstats
-# import matplotlib.pyplot as plt
+import pysamstats
+import matplotlib.pyplot as plt
 from os.path import join
 
 
@@ -54,14 +54,8 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
 
     # NOTE: for now, assumes bam
     artifact_information = "--BAM SUMMARY,--"
-    print("ARTIFACT FILES: (SUMMARY.PY)")
-    print(artifact_files)
-    for bamfile in artifact_files['bam']:
-        if bamfile[-2:].upper() == "GZ":  # if file is .bam.gz, unzip
-            with gzip.open(bamfile, 'rb') as f_in:
-                with open(bamfile[:-3], 'wb') as f_out:
-                    shutil.copyfileobj(f_in, f_out)
-            bamfile = bamfile[:-3]
+
+    for bamfile in artifact_files['files']['bam']:
         artifact_information += '\n' + str(pysam.flagstat(bamfile))
 
     # Work on this part if we have time to make visualization for the summary

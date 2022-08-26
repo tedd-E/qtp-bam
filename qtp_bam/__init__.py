@@ -27,15 +27,9 @@ from .summary import generate_html_summary
 
 # Initialize the plugin
 
-
-# QiitaArtifactType(name, description, can_be_submitted_to_ebi,
-#                   can_be_submitted_to_vamps, is_user_uploadable,
-#                   filepath_types):
 # NOTE: may have to revisit LIST_OF_ACCEPTED_FILEPATH_TYPE
-# NOTE: for now, since bam is not an accepted filetype, we will be using .tar.gz files
 artifact_types = [
-    QiitaArtifactType('BAM', 'BAM file', False, False, True,
-                      [('bam', True), ('directory', False)])
+    QiitaArtifactType('BAM', 'BAM file', False, False, [('bam', True), ('directory', False)])
 ]
 
 plugin = QiitaTypePlugin('BAM type', '0.0.1 - bam',
