@@ -55,9 +55,6 @@ def validate(qclient, job_id, parameters, out_dir):
     files = loads(parameters['files'])  # dictionary {str:filepath-type: list:filepaths}
     a_type = parameters['artifact_type']    # str:artifact-type
 
-    print("FILES (VALIDATE.PY")
-    print(files)
-    print(a_type)
 
     # if a_type.upper() != "BAM":
     #     return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
@@ -69,17 +66,17 @@ def validate(qclient, job_id, parameters, out_dir):
     #             pysam.index(bamfile)
     #         except Exception:
     #             return False, None, "Unable to generate bai file for bam file %s" % bamfile
+
     if a_type.upper() != "BAM":
         return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
 
     # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
-    # for bamfile in files['tgz']:
-    #     print(bamfile)
-        # if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
-        #     try:
-        #         pysam.index(bamfile)
-        #     except Exception:
-        #         return False, None, "Unable to generate bai file for bam file %s" % bamfile
+    for bamfile in files['bam']:
+        if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
+            try:
+                pysam.index(bamfile)
+            except Exception:
+                return False, None, "Unable to generate bai file for bam file %s" % bamfile
 
     # TODO: may need to do validation between trimmed/untrimmed/sorted/unsorted BAM
     qclient.update_job_step(job_id, "Step 2: Validating files")
@@ -87,11 +84,6 @@ def validate(qclient, job_id, parameters, out_dir):
     # ACTUAL COMMAND: samtools quickcheck *.bam && echo 'all ok' || echo 'fail'
     # TODO: check exception catches
     for bamfile in files['bam']:
-        if bamfile[-2:].upper() == "GZ":    # if file is .bam.gz, unzip
-            with gzip.open(bamfile, 'rb') as f_in:
-                with open(bamfile[:-3], 'wb') as f_out:
-                    shutil.copyfileobj(f_in, f_out)
-            bamfile = bamfile[:-3]
         try:
             pysam.quickcheck(bamfile)
         except Exception:
