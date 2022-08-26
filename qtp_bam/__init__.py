@@ -35,7 +35,7 @@ from .summary import generate_html_summary
 # NOTE: for now, since bam is not an accepted filetype, we will be using .tar.gz files
 artifact_types = [
     QiitaArtifactType('BAM', 'BAM file', False, False, True,
-                      [('tgz', True), ('directory', False)])
+                      [('bam', True), ('directory', False)])
 ]
 
 plugin = QiitaTypePlugin('BAM type', '0.0.1 - bam',

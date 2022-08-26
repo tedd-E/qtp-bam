@@ -78,9 +78,10 @@ class CreateTests(PluginTestCase):
         # test server
         test_dir = mkdtemp()
         self._clean_up_files.append(test_dir)
-        copyfile(self.bamfile, f'{test_dir}/file.bam.gz')
-        artifact_type = "tgz"
-        files = {'tgz': [f'{test_dir}/file.bam.gz']}
+        # copyfile(self.bamfile, f'{test_dir}/file.bam.gz')
+        copyfile(self.bamfile, f'{test_dir}/file.bam')
+        artifact_type = "bam"
+        files = {'bam': [f'{test_dir}/file.bam']}
         command = dumps(['BAM type', '0.0.1 - bam', 'Validate'])
         template = 1
 
@@ -93,9 +94,11 @@ class CreateTests(PluginTestCase):
         # TODO: Fill filepaths with the expected filepath list and provide
         # the expected artifact type
         # NOTE: come back to fix
-        filepaths = [(f'{test_dir}/file.bam.gz', 'tgz')]
 
-        exp_ainfo = [ArtifactInfo(None, 'tgz', filepaths)]
+
+        filepaths = [(f'{test_dir}/file.bam.gz', 'bam')]
+
+        exp_ainfo = [ArtifactInfo(None, 'bam', filepaths)]
         self.assertEqual(obs_ainfo, exp_ainfo)
         self.assertEqual(obs_error, "")
 

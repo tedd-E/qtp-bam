@@ -83,7 +83,8 @@ class SummaryTestsWith(PluginTestCase):
     # possible to 100%!!
 
 # NOTE: might have to change this to html format (see qtp-sequencing)
-EXP_HTML = "416648 + 0 in total (QC-passed reads + QC-failed reads)\n \
+EXP_HTML = "--BAM SUMMARY,--\n\
+416648 + 0 in total (QC-passed reads + QC-failed reads)\n \
 0 + 0 secondary\n\
 250 + 0 supplementary\n\
 0 + 0 duplicates\n\
