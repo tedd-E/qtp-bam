@@ -81,6 +81,7 @@ class CreateTests(PluginTestCase):
         copyfile(self.bamfile, f'{test_dir}/file.bam')
         artifact_type = "BAM"
         files = {'bam': [f'{test_dir}/file.bam']}
+
         command = dumps(['BAM type', '0.0.1 - bam', 'Validate'])
         template = 1
 
@@ -93,6 +94,7 @@ class CreateTests(PluginTestCase):
         # TODO: Fill filepaths with the expected filepath list and provide
         # the expected artifact type
         # NOTE: come back to fix
+        filepaths = [(f'{test_dir}/file.bam.gz', 'tgz')]
 
         filepaths = [(f'{test_dir}/file.bam', 'bam')]
 
