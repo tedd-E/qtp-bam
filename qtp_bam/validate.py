@@ -49,7 +49,6 @@ def validate(qclient, job_id, parameters, out_dir):
     # prep_info = qclient.get("/qiita_db/prep_template/%s/data/" % prep_id)['data']
 
     # Step 1: Gather information from Qiita
-
     qclient.update_job_step(job_id, "Step 1: Collecting information")
     prep_id = parameters['template']    # prep information id (integer)
     analysis_id = parameters['analysis']   # also an int (not important)
