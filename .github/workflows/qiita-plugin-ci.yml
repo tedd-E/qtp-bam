@@ -74,7 +74,7 @@ jobs:
         shell: bash -l {0}
         run: |
           conda config --add channels bioconda
-          conda create -q --yes -n qtp-bam python=3.9 pip pigz quast fqtools
+          conda create -q --yes -n qtp-bam python=3.9 pip pigz quast fqtools pysam pysamstats
           conda activate qtp-bam
 
           export QIITA_SERVER_CERT=`pwd`/qiita-dev/qiita_core/support_files/server.crt
