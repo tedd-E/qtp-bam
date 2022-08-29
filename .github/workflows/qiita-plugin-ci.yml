@@ -68,6 +68,7 @@ jobs:
         run: |
           conda activate qiita
           pip install qiita-dev/ --no-binary redbiom
+          pip install https://github.com/qiita-spots/qiita_client/archive/master.zip
           mkdir ~/.qiita_plugins
 
       - name: Install plugins
