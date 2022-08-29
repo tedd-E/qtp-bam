@@ -43,6 +43,6 @@ setup(name='BAM Qiita Type Plugin',
       package_data={'qtp_bam': ['support_files/config_file.cfg']},
       scripts=glob('scripts/*'),
       extras_require={'test': ["nose >= 0.10.1", "pep8"]},
-      install_requires=['click >= 3.3', 'qiita_client @ git+ssh://git@github.com/qiita-spots/qiita_client.git'],
+      install_requires=['click >= 3.3', 'qiita_client @ git+https://github.com/qiita-spots/qiita_client.git'],
       classifiers=classifiers
       )
