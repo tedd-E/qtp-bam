@@ -5,6 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
+import os
 import shutil
 from base64 import b64encode
 from io import BytesIO
@@ -48,26 +49,22 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
 
     # Step 2: generate HTML summary
     qclient.update_job_step(job_id, "Step 2: Generating HTML summary")
-    # commands in pysam equivalent to:
-    # samtools stats <file.bam> | grep "is sorted:"
-    # samtools flagstat test.bam (gets summary)
 
-    # NOTE: for now, assumes bam
     artifact_information = "--BAM SUMMARY,--"
 
     for bamfile in artifact_files['files']['bam']:
         artifact_information += '\n' + str(pysam.flagstat(bamfile))
 
-    # Work on this part if we have time to make visualization for the summary
-    # code from https://pypi.org/project/pysamstats/0.14/
-    # mybam = pysam.Samfile(artifact_files[0])
-    # a = pysamstats.load_coverage(mybam, chrom='Pf3D7_01_v3', start=10000, end=20000)
-    # plt.plot(a.pos, a.reads_all)
-    # plot = BytesIO()
-    # plt.savefig(plot, format='png')
-    # artifact_information = [(
-    #     '<img src = "data:image/png;base64,{}"/>'.format(
-    #         b64encode(plot.getvalue()).decode('utf-8')))]
+    artifact_info = "--BAM SUMMARY--"
+    for bamfile in artifact_files['files']['bam']:
+        if bamfile.endswith(".gz"):
+            bamfilepath = os.path.abspath(artifact_files['files']['bam']+bamfile)
+            with gzip.open(bamfilepath, 'rb') as f_in, open(bamfilepath.rsplit(".", 1)[0], 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+            bamfile = bamfile[:-3]
+        artifact_info += '\n' + str(pysam.flagstat(artifact_files['files']['bam']+bamfile))
+
+    print(artifact_info)
 
     of_fp = join(out_dir, "artifact_%d.html" % artifact_id)
     with open(of_fp, "w") as summaryfile:

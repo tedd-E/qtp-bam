@@ -5,6 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
+import os
 import shutil
 from json import loads
 from os.path import join, basename
@@ -55,39 +56,34 @@ def validate(qclient, job_id, parameters, out_dir):
     files = loads(parameters['files'])  # dictionary {str:filepath-type: list:filepaths}
     a_type = parameters['artifact_type']    # str:artifact-type
 
-
-    # if a_type.upper() != "BAM":
-    #     return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
-
-    # # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
-    # for bamfile in files['bam']:
-    #     if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
-    #         try:
-    #             pysam.index(bamfile)
-    #         except Exception:
-    #             return False, None, "Unable to generate bai file for bam file %s" % bamfile
-
     if a_type.upper() != "BAM":
         return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
 
+    # unzip bam.gz files
+    for bamfile in files['bam']:
+        if bamfile.endswith(".gz"):
+            bamfilepath = os.path.abspath(files['bam'] + bamfile)
+            with gzip.open(bamfilepath, 'rb') as f_in, open(bamfilepath.rsplit(".", 1)[0], 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+
     # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
     for bamfile in files['bam']:
-        if bamfile[-4:] == '.bam' and bamfile+'.bai' not in files['bam']:
+        if bamfile.endswith(".bam") and bamfile+'.bai' not in files['bam']:
             try:
                 pysam.index(bamfile)
             except Exception:
-                return False, None, "Unable to generate bai file for bam file %s" % bamfile
+                print("Unable to generate bai file for bam file %s" % bamfile)
+                # return False, None, "Unable to generate bai file for bam file %s" % bamfile
 
-    # TODO: may need to do validation between trimmed/untrimmed/sorted/unsorted BAM
     qclient.update_job_step(job_id, "Step 2: Validating files")
     # Validate if the files provided by Qiita generate a valid artifact of type "a_type"
-    # ACTUAL COMMAND: samtools quickcheck *.bam && echo 'all ok' || echo 'fail'
-    # TODO: check exception catches
+
     for bamfile in files['bam']:
-        try:
-            pysam.quickcheck(bamfile)
-        except Exception:
-            return False, None, "Error: %s failed sanity check. Verify file is formatted properly" % bamfile
+        if not bamfile.endswith(".gz"):
+            try:
+                pysam.quickcheck(bamfile)
+            except Exception:
+                return False, None, "Error: %s failed sanity check. Verify file is formatted properly" % bamfile
 
     # NOTE: skipping this part for now
     # qclient.update_job_step(job_id, "Step 3: Fixing files")

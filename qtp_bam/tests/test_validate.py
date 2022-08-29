@@ -73,8 +73,7 @@ class CreateTests(PluginTestCase):
         return job_id, parameters
 
     def test_validate(self):
-        # TODO: fill the following variables to create the job in the Qiita
-        # test server
+        # fill the following variables to create the job in the Qiita test server
         test_dir = mkdtemp()
         self._clean_up_files.append(test_dir)
 
@@ -91,20 +90,14 @@ class CreateTests(PluginTestCase):
             self.qclient, job_id, parameters, self.out_dir)
 
         self.assertTrue(obs_success)
-        # TODO: Fill filepaths with the expected filepath list and provide
-        # the expected artifact type
-        # NOTE: come back to fix
-        filepaths = [(f'{test_dir}/file.bam.gz', 'tgz')]
 
+        # Fill filepaths with the expected filepath list and provide the expected artifact type
         filepaths = [(f'{test_dir}/file.bam', 'bam')]
-
         exp_ainfo = [ArtifactInfo(None, 'BAM', filepaths)]
 
         self.assertEqual(obs_ainfo, exp_ainfo)
         self.assertEqual(obs_error, "")
 
-    # TODO: Write any other tests needed to get your coverage as close as
-    # possible to 100%!!
 
 if __name__ == '__main__':
     main()

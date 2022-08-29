@@ -58,7 +58,7 @@ class SummaryTestsWith(PluginTestCase):
 
     def test_generate_html_summary(self):
         # test server
-        artifact_id = 420
+        artifact_id = 4
         command = dumps(['BAM type', '0.0.1 - bam', 'Generate HTML summary'])
         job_id, parameters = self._create_job(artifact_id, command)
 
@@ -77,13 +77,13 @@ class SummaryTestsWith(PluginTestCase):
 
         with open(html_fp) as html_f:
             html = html_f.read()
-        self.assertEqual(html, '\n'.join(EXP_HTML))
+        self.assertEqual(html, EXP_HTML)
+        # self.assertEqual(html, '\n'.join(EXP_HTML))
 
-    # TODO: Write any other tests needed to get your coverage as close as
-    # possible to 100%!!
 
 # NOTE: might have to change this to html format (see qtp-sequencing)
-EXP_HTML = "416648 + 0 in total (QC-passed reads + QC-failed reads)\n \
+EXP_HTML = "--BAM SUMMARY--\n\
+416648 + 0 in total (QC-passed reads + QC-failed reads)\n \
 0 + 0 secondary\n\
 250 + 0 supplementary\n\
 0 + 0 duplicates\n\
