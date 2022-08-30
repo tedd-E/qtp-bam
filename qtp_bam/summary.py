@@ -11,8 +11,6 @@ from base64 import b64encode
 from io import BytesIO
 import gzip
 import pysam
-import pysamstats
-import matplotlib.pyplot as plt
 from os.path import join
 
 
@@ -50,21 +48,19 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
     # Step 2: generate HTML summary
     qclient.update_job_step(job_id, "Step 2: Generating HTML summary")
 
-    artifact_information = "--BAM SUMMARY,--"
+    artifact_information = "--BAM SUMMARY--"
 
-    for bamfile in artifact_files['files']['bam']:
+    for bamfile in artifact_files['bam']:
         artifact_information += '\n' + str(pysam.flagstat(bamfile))
 
     artifact_info = "--BAM SUMMARY--"
-    for bamfile in artifact_files['files']['bam']:
+    for bamfile in artifact_files['bam']:
         if bamfile.endswith(".gz"):
-            bamfilepath = os.path.abspath(artifact_files['files']['bam']+bamfile)
+            bamfilepath = os.path.abspath(artifact_files['bam']+bamfile)
             with gzip.open(bamfilepath, 'rb') as f_in, open(bamfilepath.rsplit(".", 1)[0], 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
             bamfile = bamfile[:-3]
-        artifact_info += '\n' + str(pysam.flagstat(artifact_files['files']['bam']+bamfile))
-
-    print(artifact_info)
+        artifact_info += '\n' + str(pysam.flagstat(artifact_files['bam']+bamfile))
 
     of_fp = join(out_dir, "artifact_%d.html" % artifact_id)
     with open(of_fp, "w") as summaryfile:
