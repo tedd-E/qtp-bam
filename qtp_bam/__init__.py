@@ -33,7 +33,7 @@ from .summary import generate_html_summary
 
 # NOTE: may have to revisit LIST_OF_ACCEPTED_FILEPATH_TYPE
 artifact_types = [
-    QiitaArtifactType('BAM', 'BAM file', False, False, True, [('bam', True), ('directory', False)])
+    QiitaArtifactType('BAM', 'BAM file', False, False, True, [('tgz', True), ('directory', False), ('log', False)])
 
 ]
 
