@@ -8,7 +8,7 @@
 
 from unittest import main
 from tempfile import mkdtemp
-from os import remove, environ
+from os import remove
 from os.path import exists, isdir
 from shutil import rmtree
 from json import dumps
@@ -47,23 +47,26 @@ class SummaryTestsWith(PluginTestCase):
             The job id and the parameters dictionary
         """
         # Create a new job
-        parameters = {'input_data': artifact}
-        data = {'command': command,
-                'parameters': dumps(parameters),
-                'status': 'running'}
-        res = self.qclient.post('/apitest/processing_job/', data=data)
-        job_id = res['job']
+        parameters = {"input_data": artifact}
+        data = {
+            "command": command,
+            "parameters": dumps(parameters),
+            "status": "running",
+        }
+        res = self.qclient.post("/apitest/processing_job/", data=data)
+        job_id = res["job"]
 
         return job_id, parameters
 
     def test_generate_html_summary(self):
         # test server
-        artifact_id = 9     # NOTE: pay attention to ID
-        command = dumps(['BAM type', '0.0.1 - bam', 'Generate HTML summary'])
+        artifact_id = 9  # NOTE: pay attention to ID
+        command = dumps(["BAM type", "0.0.1 - bam", "Generate HTML summary"])
         job_id, parameters = self._create_job(artifact_id, command)
 
         obs_success, obs_ainfo, obs_error = generate_html_summary(
-            self.qclient, job_id, parameters, self.out_dir)
+            self.qclient, job_id, parameters, self.out_dir
+        )
 
         # asserting reply
         self.assertTrue(obs_success)
@@ -72,7 +75,7 @@ class SummaryTestsWith(PluginTestCase):
 
         # asserting content of html
         res = self.qclient.get("/qiita_db/artifacts/%s/" % artifact_id)
-        html_fp = res['files']['html_summary'][0]
+        html_fp = res["files"]["html_summary"][0]
         self._clean_up_files.append(html_fp)
 
         with open(html_fp) as html_f:
@@ -97,5 +100,5 @@ EXP_HTML = "--BAM SUMMARY--\n\
 0 + 0 with mate mapped to a different chr\n\
 0 + 0 with mate mapped to a different chr (mapQ>=5)"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

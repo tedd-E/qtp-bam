@@ -13,6 +13,7 @@ import gzip
 import pysam
 from qiita_client import ArtifactInfo
 
+
 # can ignore qclient, seems to just log the current step
 def validate(qclient, job_id, parameters, out_dir):
     """Validate and fix a new artifact
@@ -46,51 +47,63 @@ def validate(qclient, job_id, parameters, out_dir):
     # You may/may not need the prep information contents. If you need it,
     # uncomment the line below. Prep info is a dictionary with the following
     # format: {sample_id: {column_name: column_value}}
-    # prep_info = qclient.get("/qiita_db/prep_template/%s/data/" % prep_id)['data']
+    # prep_info =
+    # qclient.get("/qiita_db/prep_template/%s/data/" % prep_id)['data']
 
     # Step 1: Gather information from Qiita
     qclient.update_job_step(job_id, "Step 1: Collecting information")
-    prep_id = parameters['template']    # prep information id (integer)
-    analysis_id = parameters['analysis']   # also an int (not important)
-    files = loads(parameters['files'])  # dictionary {str:filepath-type: list:filepaths}
-    a_type = parameters['artifact_type']    # str:artifact-type
+    # prep_id = parameters["template"]  # prep information id (integer)
+    # analysis_id = parameters["analysis"]  # also an int (not important)
+    files = loads(
+        parameters["files"])  # dictionary {str:filepath-type: list:filepaths}
+    a_type = parameters["artifact_type"]  # str:artifact-type
 
     if a_type.upper() != "BAM":
-        return False, None, "Unknown artifact type %s. Supported types: BAM" % a_type
+        return False, None, \
+               f'Unknown artifact type {a_type}. Supported types: BAM'
 
     # unzip bam.gz files
-    for bamfile in files['bam']:
+    for bamfile in files["bam"]:
         if bamfile.endswith(".gz"):
-            bamfilepath = os.path.abspath(files['bam'] + bamfile)
-            with gzip.open(bamfilepath, 'rb') as f_in, open(bamfilepath.rsplit(".", 1)[0], 'wb') as f_out:
+            bamfilepath = os.path.abspath(files["bam"] + bamfile)
+            with gzip.open(bamfilepath, "rb") as f_in, open(
+                    bamfilepath.rsplit(".", 1)[0], "wb"
+            ) as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
-    # check for valid bam/bai pair (assumes bai is in 'bam' folder), generate if missing .bai
-    for bamfile in files['bam']:
-        if bamfile.endswith(".bam") and bamfile+'.bai' not in files['bam']:
+    # check for valid bam/bai pair
+    # (assumes bai is in 'bam' folder), generate if missing .bai
+    for bamfile in files["bam"]:
+        if bamfile.endswith(".bam") and bamfile + ".bai" not in files["bam"]:
             try:
                 pysam.index(bamfile)
             except Exception:
-                print("Unable to generate bai file for bam file %s" % bamfile)
-                # return False, None, "Unable to generate bai file for bam file %s" % bamfile
+                print(f'Unable to generate bai file for bam file {bamfile}')
+                # return False, None,
+                # "Unable to generate bai file for bam file %s" % bamfile
 
     qclient.update_job_step(job_id, "Step 2: Validating files")
-    # Validate if the files provided by Qiita generate a valid artifact of type "a_type"
+    # Validate if the files provided by Qiita
+    # generate a valid artifact of type "a_type"
 
-    for bamfile in files['bam']:
+    for bamfile in files["bam"]:
         if not bamfile.endswith(".gz"):
             try:
                 pysam.quickcheck(bamfile)
             except Exception:
-                return False, None, "Error: %s failed sanity check. Verify file is formatted properly" % bamfile
+                return (
+                    False,
+                    None,
+                    f'Error: {bamfile} failed sanity check. '
+                    f'Verify file is formatted properly'
+                )
 
     # NOTE: skipping this part for now
     # qclient.update_job_step(job_id, "Step 3: Fixing files")
-    # TODO: If the files are not creating a valid artifact but they can be corrected, correct them here
 
     # fill filepaths with a list of tuples with (filepath, filepath type)
     filepaths = []
-    new_bam_fp = join(out_dir, basename(files['bam'][0]))
-    filepaths.append((new_bam_fp, 'bam'))
+    new_bam_fp = join(out_dir, basename(files["bam"][0]))
+    filepaths.append((new_bam_fp, "bam"))
 
     return True, [ArtifactInfo(None, a_type, filepaths)], ""

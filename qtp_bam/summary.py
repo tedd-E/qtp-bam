@@ -7,8 +7,6 @@
 # -----------------------------------------------------------------------------
 import os
 import shutil
-from base64 import b64encode
-from io import BytesIO
 import gzip
 import pysam
 from os.path import join
@@ -40,27 +38,29 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
     # This is the only parameter provided by Qiita: the artifact id. From here,
     # the developer should be able to retrieve any further information needed
     # to generate the HTML summary
-    artifact_id = parameters['input_data']
+    artifact_id = parameters["input_data"]
     qclient_url = "/qiita_db/artifacts/%s/" % artifact_id
     artifact_info = qclient.get(qclient_url)
-    artifact_files = artifact_info['files']    # Get the artifact files
+    artifact_files = artifact_info["files"]  # Get the artifact files
 
     # Step 2: generate HTML summary
     qclient.update_job_step(job_id, "Step 2: Generating HTML summary")
 
     artifact_information = "--BAM SUMMARY--"
 
-    for bamfile in artifact_files['bam']:
-        artifact_information += '\n' + str(pysam.flagstat(bamfile))
+    for bamfile in artifact_files["bam"]:
+        artifact_information += "\n" + str(pysam.flagstat(bamfile))
 
     artifact_info = "--BAM SUMMARY--"
-    for bamfile in artifact_files['bam']:
+    for bamfile in artifact_files["bam"]:
         if bamfile.endswith(".gz"):
-            bamfilepath = os.path.abspath(artifact_files['bam']+bamfile)
-            with gzip.open(bamfilepath, 'rb') as f_in, open(bamfilepath.rsplit(".", 1)[0], 'wb') as f_out:
+            bamfilepath = os.path.abspath(artifact_files["bam"] + bamfile)
+            with gzip.open(bamfilepath, "rb") as f_in, open(
+                    bamfilepath.rsplit(".", 1)[0], "wb") as f_out:
                 shutil.copyfileobj(f_in, f_out)
             bamfile = bamfile[:-3]
-        artifact_info += '\n' + str(pysam.flagstat(artifact_files['bam']+bamfile))
+        artifact_info += "\n" + str(
+            pysam.flagstat(artifact_files["bam"] + bamfile))
 
     of_fp = join(out_dir, "artifact_%d.html" % artifact_id)
     with open(of_fp, "w") as summaryfile:
@@ -72,7 +72,7 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
     success = True
     error_msg = ""
     try:
-        qclient.patch(qclient_url, 'add', '/html_summary/',
+        qclient.patch(qclient_url, "add", "/html_summary/",
                       value=html_summary_fp)
     except Exception as e:
         success = False

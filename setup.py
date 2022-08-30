@@ -25,24 +25,29 @@ classes = """
     Operating System :: MacOS :: MacOS X
 """
 
-with open('README.rst') as f:
+with open("README.rst") as f:
     long_description = f.read()
 
-classifiers = [s.strip() for s in classes.split('\n') if s]
+classifiers = [s.strip() for s in classes.split("\n") if s]
 
-setup(name='BAM Qiita Type Plugin',
-      version=__version__,
-      long_description=long_description,
-      license="BSD",
-      description='Qiita Type Plugin: bam',
-      author="Qiita development team",
-      author_email="qiita.help@gmail.com",
-      url='https://github.com/qiita-spots/qtp-bam',
-      test_suite='nose.collector',
-      packages=['qtp_bam'],
-      package_data={'qtp_bam': ['support_files/config_file.cfg']},
-      scripts=glob('scripts/*'),
-      extras_require={'test': ["nose >= 0.10.1", "pep8"]},
-      install_requires=['click >= 3.3', 'qiita_client @ git+https://github.com/qiita-spots/qiita_client.git'],
-      classifiers=classifiers
-      )
+setup(
+    name="BAM Qiita Type Plugin",
+    version=__version__,
+    long_description=long_description,
+    license="BSD",
+    description="Qiita Type Plugin: bam",
+    author="Qiita development team",
+    author_email="qiita.help@gmail.com",
+    url="https://github.com/tedd-E/qtp-bam",
+    test_suite="nose.collector",
+    packages=["qtp_bam"],
+    package_data={"qtp_bam": ["support_files/config_file.cfg"]},
+    scripts=glob("scripts/*"),
+    extras_require={"test": ["nose >= 0.10.1", "pep8"]},
+    install_requires=[
+        "click >= 3.3",
+        "pysam",
+        "qiita_client @ git+https://github.com/qiita-spots/qiita_client.git",
+    ],
+    classifiers=classifiers,
+)

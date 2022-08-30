@@ -26,17 +26,28 @@ from .summary import generate_html_summary
 # create an artifact of the given type
 
 # NOTE FROM NIEMA: The example above seems to be out of date:
-#                  it doesn't match the current BIOM example https://github.com/qiita-spots/qtp-biom/blob/731b5529fc5f559a868c1d3a6e14cecf4e59198b/qtp_biom/__init__.py#L16-L19
-#                  because it's missing the IS_USER_UPLOADABLE boolean https://github.com/qiita-spots/qiita_client/blob/0e04e78578c8924f65e12ef6813ebadd2886c5e9/qiita_client/plugin.py#L126-L128
+# it doesn't match the current BIOM example https://github.com/qiita-spots/
+# qtp-biom/blob/731b5529fc5f559a868c1d3a6e14cecf4e59198b/qtp_biom/
+# __init__.py#L16-L19
+# because it's missing the IS_USER_UPLOADABLE boolean https://github.com/
+# qiita-spots/qiita_client/blob/0e04e78578c8924f65e12ef6813ebadd2886c5e9/
+# qiita_client/plugin.py#L126-L128
 
 # Initialize the plugin
 
 # NOTE: may have to revisit LIST_OF_ACCEPTED_FILEPATH_TYPE
 artifact_types = [
-    QiitaArtifactType('BAM', 'BAM file', False, False, True, [('tgz', True), ('directory', False), ('log', False)])
+    QiitaArtifactType(
+        "BAM", "BAM file", False, False, True,
+        [("tgz", True), ("directory", False)]
+    )
 ]
 
-plugin = QiitaTypePlugin('BAM type', '0.0.1 - bam',
-                         'Qiita Type Plugin: BAM',
-                         validate, generate_html_summary,
-                         artifact_types)
+plugin = QiitaTypePlugin(
+    "BAM type",
+    "0.0.1 - bam",
+    "Qiita Type Plugin: BAM",
+    validate,
+    generate_html_summary,
+    artifact_types,
+)
