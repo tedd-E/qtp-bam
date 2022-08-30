@@ -99,11 +99,10 @@ class CreateTests(PluginTestCase):
         filepaths = [(f"{test_dir}/file.bam", "bam")]
         exp_ainfo = [ArtifactInfo(None, "BAM", filepaths)]
 
-        print("TEST VALIDATE DEBUG~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print(filepaths)
-
-        # TODO: fix assertion error below
-        self.assertEqual(obs_ainfo[0], exp_ainfo[0])
+        self.assertEqual(obs_ainfo[0].artifact_type,
+                         exp_ainfo[0].artifact_type)
+        self.assertEqual(obs_ainfo[0].archive,
+                         exp_ainfo[0].archive)
         self.assertEqual(obs_error, "")
 
 

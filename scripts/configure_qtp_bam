@@ -21,7 +21,8 @@ def config(env_script, server_cert):
     """Generates the Qiita configuration files"""
     if server_cert == 'None':
         server_cert = None
-    plugin.generate_config(env_script, 'start_qtp_bam', server_cert=server_cert)
+    plugin.generate_config(env_script, 'start_qtp_bam',
+                           server_cert=server_cert)
 
 
 if __name__ == '__main__':
