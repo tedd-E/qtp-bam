@@ -1,4 +1,4 @@
-bam Qiita Type Plugin
+BAM Qiita Type Plugin
 =====================
 
 |Build Status| |Coverage Status|
@@ -7,9 +7,7 @@ bam Qiita Type Plugin
 is an analysis environment for microbiome (and other "comparative -omics")
 datasets.
 
-This package includes the bam Qiita type plugin.
-
-#TODO: Add a description of the artifact types described in this type plugin.
+This package includes the BAM Qiita type plugin.
 
 How to test this package?
 -------------------------
