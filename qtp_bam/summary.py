@@ -12,6 +12,22 @@ import pysam
 from os.path import join
 
 
+def generate_local_summary(filepath, out_dir, artifact_id):
+    error_mssg = ""
+    success = True
+    artifact_info = "--BAM SUMMARY--\n"
+
+    if 'bam' in filepath:
+        artifact_info += str(pysam.flagstat(filepath['bam'][0]))
+        html_fp = join(out_dir, f'artifact_{artifact_id}')
+        with open(html_fp, "w") as summaryfile:
+            summaryfile.write(artifact_info)
+    else:
+        success = False
+
+    return success, None, error_mssg
+
+
 def generate_html_summary(qclient, job_id, parameters, out_dir):
     """Generates the HTML summary of an artifact
 
