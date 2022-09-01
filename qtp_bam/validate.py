@@ -65,6 +65,8 @@ def validate(qclient, job_id, parameters, out_dir):
                 return False, None, \
                        f"Unable to generate bai file for bam file {bamfile}.\n\
                         Error output: {e}"
+            except Exception as e:
+                return False, None, str(e)
 
     qclient.update_job_step(job_id, "Step 2: Validating files")
 
@@ -79,6 +81,8 @@ def validate(qclient, job_id, parameters, out_dir):
                     f'Error: {bamfile} failed sanity check. Error output: {e}'
                     f'\nVerify file is formatted properly'
                 )
+            except Exception as e:
+                return False, None, str(e)
 
     filepaths = []
     new_bam_fp = join(out_dir, basename(files["bam"][0]))
