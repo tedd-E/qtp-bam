@@ -14,7 +14,6 @@ import pysam
 from qiita_client import ArtifactInfo
 
 
-# can ignore qclient, seems to just log the current step
 def validate(qclient, job_id, parameters, out_dir):
     """Validate and fix a new artifact
 
@@ -36,27 +35,13 @@ def validate(qclient, job_id, parameters, out_dir):
         The artifact information, if successful
         The error message, if not successful
     """
-    # These are the 3 parameters provided by Qiita:
-    # - prep_id: An integer with the prep information id
-    # - files: A dictionary of the format {str: list of str}, in which keys
-    #          are the filepath type and values a list of filepaths
-    # - a_type: A string with the artifact type to be validated
-    # From here, the developer should be able to gather any further information
-    # needed to validate the files
-
-    # You may/may not need the prep information contents. If you need it,
-    # uncomment the line below. Prep info is a dictionary with the following
-    # format: {sample_id: {column_name: column_value}}
-    # prep_info =
-    # qclient.get("/qiita_db/prep_template/%s/data/" % prep_id)['data']
 
     # Step 1: Gather information from Qiita
     qclient.update_job_step(job_id, "Step 1: Collecting information")
-    # prep_id = parameters["template"]  # prep information id (integer)
-    # analysis_id = parameters["analysis"]  # also an int (not important)
+
     files = loads(
-        parameters["files"])  # dictionary {str:filepath-type: list:filepaths}
-    a_type = parameters["artifact_type"]  # str:artifact-type
+        parameters["files"])
+    a_type = parameters["artifact_type"]
 
     if a_type.upper() != "BAM":
         return False, None, \
@@ -71,37 +56,30 @@ def validate(qclient, job_id, parameters, out_dir):
             ) as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
-    # check for valid bam/bai pair
-    # (assumes bai is in 'bam' folder), generate if missing .bai
+    # check for valid bam/bai pair (assumes bai is in 'bam' folder)
     for bamfile in files["bam"]:
         if bamfile.endswith(".bam") and bamfile + ".bai" not in files["bam"]:
             try:
                 pysam.index(bamfile)
-            except Exception:
-                print(f'Unable to generate bai file for bam file {bamfile}')
-                # return False, None,
-                # "Unable to generate bai file for bam file %s" % bamfile
+            except pysam.SamToolsError as e:
+                return False, None, \
+                       f"Unable to generate bai file for bam file {bamfile}.\n\
+                        Error output: {e}"
 
     qclient.update_job_step(job_id, "Step 2: Validating files")
-    # Validate if the files provided by Qiita
-    # generate a valid artifact of type "a_type"
 
     for bamfile in files["bam"]:
         if not bamfile.endswith(".gz"):
             try:
                 pysam.quickcheck(bamfile)
-            except Exception:
+            except pysam.SamToolsError as e:
                 return (
                     False,
                     None,
-                    f'Error: {bamfile} failed sanity check. '
-                    f'Verify file is formatted properly'
+                    f'Error: {bamfile} failed sanity check. Error output: {e}'
+                    f'\nVerify file is formatted properly'
                 )
 
-    # NOTE: skipping this part for now
-    # qclient.update_job_step(job_id, "Step 3: Fixing files")
-
-    # fill filepaths with a list of tuples with (filepath, filepath type)
     filepaths = []
     new_bam_fp = join(out_dir, basename(files["bam"][0]))
     filepaths.append((new_bam_fp, "bam"))

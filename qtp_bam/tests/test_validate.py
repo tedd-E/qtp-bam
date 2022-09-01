@@ -14,7 +14,6 @@ from inspect import currentframe, getfile
 from shutil import copyfile, rmtree
 from json import dumps
 
-# from qiita_client import QiitaClient, ArtifactInfo
 from qiita_client import ArtifactInfo
 from qiita_client.testing import PluginTestCase
 
@@ -22,13 +21,11 @@ from qtp_bam.validate import validate
 
 
 class CreateTests(PluginTestCase):
-    # TODO: create
     def setUp(self):
         self.out_dir = mkdtemp()
         self._clean_up_files = [self.out_dir]
         self.source_dir = join(dirname(abspath(getfile(currentframe()))),
                                "test_data")
-        # test file is trimmed and sorted BAM
         self.bamfile = join(self.source_dir, "file.bam")
 
     def tearDown(self):
@@ -91,11 +88,8 @@ class CreateTests(PluginTestCase):
         obs_success, obs_ainfo, obs_error = validate(
             self.qclient, job_id, parameters, self.out_dir
         )
-
         self.assertTrue(obs_success)
 
-        # Fill filepaths with the expected filepath list and
-        # provide the expected artifact type
         filepaths = [(f"{test_dir}/file.bam", "bam")]
         exp_ainfo = [ArtifactInfo(None, "BAM", filepaths)]
 

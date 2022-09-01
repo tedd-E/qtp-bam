@@ -51,9 +51,7 @@ def generate_html_summary(qclient, job_id, parameters, out_dir):
     """
     # Step 1: gather file information from qiita using REST api
     qclient.update_job_step(job_id, "Step 1: Gathering information from Qiita")
-    # This is the only parameter provided by Qiita: the artifact id. From here,
-    # the developer should be able to retrieve any further information needed
-    # to generate the HTML summary
+
     artifact_id = parameters["input_data"]
     qclient_url = "/qiita_db/artifacts/%s/" % artifact_id
     artifact_info = qclient.get(qclient_url)
