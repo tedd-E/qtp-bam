@@ -1,7 +1,7 @@
 BAM Qiita Type Plugin
 =====================
 
-|Build Status| |Coverage Status|
+|Build Status|
 
 `Qiita <https://github.com/biocore/qiita/>`__ (canonically pronounced *cheetah*)
 is an analysis environment for microbiome (and other "comparative -omics")
@@ -29,7 +29,5 @@ This plugin was created with `Cookiecutter <https://github.com/audreyr/cookiecut
 and the `qiita-spots/qtp-template-cookiecutter <https://github.com/qiita-spots/qtp-template-cookiecutter>`__
 project template.
 
-.. |Build Status| image:: https://travis-ci.org/qiita-spots/qtp-bam.png?branch=master
-   :target: https://travis-ci.org/qiita-spots/qtp-bam
-.. |Coverage Status| image:: https://coveralls.io/repos/qiita-spots/qtp-bam/badge.png?branch=master
-   :target: https://coveralls.io/r/qiita-spots/qtp-bam
+.. |Build Status| image:: https://github.com/tedd-E/qtp-bam/actions/workflows/qiita-plugin-ci.yml/badge.svg
+   :target: https://github.com/tedd-E/qtp-bam/actions/workflows/qiita-plugin-ci.yml
