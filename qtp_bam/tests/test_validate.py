@@ -80,7 +80,7 @@ class CreateTests(PluginTestCase):
         artifact_type = "BAM"
         files = {"bam": [f"{test_dir}/file.bam"]}
 
-        command = dumps(["BAM type", "0.0.1 - bam", "Validate"])
+        command = dumps(["BAM type", "0.0.1", "Validate"])
         template = 1
 
         job_id, parameters = self._create_job(artifact_type, files, command,

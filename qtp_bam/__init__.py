@@ -22,7 +22,7 @@ artifact_types = [
 # Initialize the plugin
 plugin = QiitaTypePlugin(
     "BAM type",
-    "0.0.1 - bam",
+    "0.0.1",
     "Qiita Type Plugin: BAM",
     validate,
     generate_html_summary,
