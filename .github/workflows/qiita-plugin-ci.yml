@@ -81,6 +81,8 @@ jobs:
           export QIITA_CONFIG_FP=`pwd`/qiita-dev/qiita_core/support_files/config_test_local.cfg
           pip install -U pip
           pip install .
+          pip --quiet install coveralls
+          pip --quiet install coverage
           configure_qtp_bam --env-script "source /home/runner/.profile; conda activate qtp-bam" --server-cert $QIITA_SERVER_CERT
 
       - name: Starting services
